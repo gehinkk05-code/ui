@@ -1549,6 +1549,12 @@ function ImGui:CreateWindow(WindowConfig)
 	Toggle.Visible = WindowConfig.NoCollapse ~= true
 	ImGui:ApplyAnimations(Toggle.ToggleButton, "Tabs")
 
+	--// Move toggle to right side
+	Toggle.Parent = TitleBar
+	Toggle.Position = UDim2.new(1, -38, 0, 0)
+	Toggle.AnchorPoint = Vector2.new(1, 0)
+	Toggle.Size = UDim2.new(0, 30, 1, 0)
+
 	local ToolBar = Content.ToolBar
 	ToolBar.Visible = WindowConfig.TabsBar ~= false
 
@@ -1580,6 +1586,33 @@ function ImGui:CreateWindow(WindowConfig)
 		local HeaderSizeY = self:GetHeaderSizeY()
 		Body.Size = UDim2.new(1, 0, 1, -HeaderSizeY)
 	end
+	--// Vertical ToolBar on left side
+	if WindowConfig.TabsBar ~= false then
+		local TAB_WIDTH = 80
+		ToolBar.Size = UDim2.new(0, TAB_WIDTH, 1, 0)
+		ToolBar.Position = UDim2.new(0, 0, 0, 0)
+		ToolBar.BackgroundTransparency = 1
+		local UIListLayout = ToolBar:FindFirstChildOfClass("UIListLayout")
+		if UIListLayout then
+			UIListLayout.FillDirection = Enum.FillDirection.Vertical
+			UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+			UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Top
+			UIListLayout.Padding = UDim.new(0, 2)
+		end
+		--// Separator line
+		local Line = Instance.new("Frame")
+		Line.Size = UDim2.new(0, 1, 1, 0)
+		Line.Position = UDim2.new(0, TAB_WIDTH, 0, 0)
+		Line.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+		Line.BackgroundTransparency = 0.5
+		Line.BorderSizePixel = 0
+		Line.ZIndex = 10
+		Line.Parent = Content
+		--// Shift body right
+		Body.Position = UDim2.new(0, TAB_WIDTH + 1, 0, 0)
+		Body.Size = UDim2.new(1, -(TAB_WIDTH + 1), 1, 0)
+	end
+
 	WindowConfig:UpdateBody()
 
 	--// Open/Close
@@ -1631,9 +1664,9 @@ function ImGui:CreateWindow(WindowConfig)
 		TabButton.Name = Name
 		TabButton.Text = Name
 		TabButton.Visible = true
+		TabButton.Size = UDim2.new(1, 0, 0, 30)
+		TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 		TabButton.Parent = ToolBar
-		TabButton.BackgroundColor3 = Color3.fromRGB(10, 20, 60)
-		TabButton.TextColor3 = Color3.fromRGB(180, 200, 255)
 		Config.Button = TabButton
 
 		local AutoSizeAxis = WindowConfig.AutoSize or "Y"
