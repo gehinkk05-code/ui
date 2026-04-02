@@ -1582,14 +1582,10 @@ function ImGui:CreateWindow(WindowConfig)
 		return ToolbarY + TitlebarY
 	end
 
-	function WindowConfig:UpdateBody()
-		local HeaderSizeY = self:GetHeaderSizeY()
-		Body.Size = UDim2.new(1, 0, 1, -HeaderSizeY)
-	end
-	--// Vertical ToolBar on left side
+	local SidebarWidth = 0
 	if WindowConfig.TabsBar ~= false then
-		local TAB_WIDTH = 80
-		ToolBar.Size = UDim2.new(0, TAB_WIDTH, 1, 0)
+		SidebarWidth = 81
+		ToolBar.Size = UDim2.new(0, SidebarWidth - 1, 1, 0)
 		ToolBar.Position = UDim2.new(0, 0, 0, 0)
 		ToolBar.BackgroundTransparency = 1
 		local UIListLayout = ToolBar:FindFirstChildOfClass("UIListLayout")
@@ -1599,18 +1595,19 @@ function ImGui:CreateWindow(WindowConfig)
 			UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Top
 			UIListLayout.Padding = UDim.new(0, 2)
 		end
-		--// Separator line
 		local Line = Instance.new("Frame")
 		Line.Size = UDim2.new(0, 1, 1, 0)
-		Line.Position = UDim2.new(0, TAB_WIDTH, 0, 0)
+		Line.Position = UDim2.new(0, SidebarWidth - 1, 0, 0)
 		Line.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 		Line.BackgroundTransparency = 0.5
 		Line.BorderSizePixel = 0
 		Line.ZIndex = 10
 		Line.Parent = Content
-		--// Shift body right
-		Body.Position = UDim2.new(0, TAB_WIDTH + 1, 0, 0)
-		Body.Size = UDim2.new(1, -(TAB_WIDTH + 1), 1, 0)
+	end
+
+	function WindowConfig:UpdateBody()
+		Body.Position = UDim2.new(0, SidebarWidth, 0, 0)
+		Body.Size = UDim2.new(1, -SidebarWidth, 1, 0)
 	end
 
 	WindowConfig:UpdateBody()
