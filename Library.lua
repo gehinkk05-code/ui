@@ -1,6 +1,6 @@
 --// GazGui By Csyzen
---// country Ukraine
---// Made by Csyzen 2026 22 March 21:10 
+--// че
+--// хуй
 
 local ImGui = {
 	Animations = {
